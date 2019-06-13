@@ -1,0 +1,4 @@
+config.ini
+.qiniu_pythonsdk_hostscache.json
+/logs
+/images
