@@ -285,6 +285,13 @@ class Spirde():
 
 
 if __name__ == '__main__':
+
     spiede = Spirde()
 
-    info = spiede.get_url(1, 0, 2)
+    #type 1：检查更新 2：全量更新
+
+    #offset:页码
+
+    #limit:每页展示数据
+
+    info = spiede.get_url(2, 0, 20)
