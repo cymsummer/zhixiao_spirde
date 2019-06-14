@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 from logger import Logger
-import requests, json, hashlib, os, time, random,configparser
+import requests, json, hashlib, os, time, random,configparser,chardet
 
 from urllib.request import urlretrieve
 from qiniu import Auth, put_file, etag, urlsafe_base64_encode
@@ -211,15 +211,18 @@ class Spirde():
 
             # 总条数
             total = info['meta']['total_count']
-
             if (total >= zx_num):
                 try:
                     #处理数据
                     self.get_content(info)
                 except Exception as ex:
                     self.logger.error(ex)
+
             else:
                 return
+
+            time.sleep(random.uniform(0.8, 3.2))
+
             offset += 20
 
     def get_url(self, type, offset, limit):
@@ -266,7 +269,9 @@ class Spirde():
         """
 
         for index in range(len(info['objects'])):
+
             new_info = info['objects'][index]
+
             # 数据处理
             data = self.deal_data(new_info)
 
@@ -281,7 +286,6 @@ class Spirde():
 
             self.logger.info('\n 完成回发数据,返回结果 \n %s \n' % r.text)
 
-            time.sleep(random.uniform(0.8, 3.2))
 
 
 if __name__ == '__main__':
