@@ -48,7 +48,7 @@ class Spirde():
         """
 
         # python图片下载
-        photo_url = "http://img.supercr.top/" + img_name + ".jpg"
+        photo_url = "http://img.supercr.top/zx/" + img_name + ".jpg"
 
         # 校验图片是否存在
         response = requests.get(url=photo_url)
@@ -72,6 +72,8 @@ class Spirde():
         else:
 
             self.logger.info('ucloud图片地址已存在： %s \n' % img_url)
+
+            return photo_url
 
     def up_img(self, img_url, img_name):
         """
@@ -151,8 +153,7 @@ class Spirde():
 
         # 小程序内容图片
         for index in range(len(new_info["screenshot"])):
-            img = self.down_img(new_info["screenshot"][index]["image"],
-                                self.md5_name(new_info["screenshot"][index]["image"]))
+            img = self.down_img(new_info["screenshot"][index]["image"],self.md5_name(new_info["screenshot"][index]["image"]))
 
             content_img += img + ","
 
@@ -202,9 +203,7 @@ class Spirde():
             return_info = requests.get(url)
 
             # 请求数据判断页码
-            html = return_info.text
-
-            info = json.loads(html)
+            info = return_info.json()
 
             # 请求总数
             zx_num = offset + limit
@@ -234,23 +233,30 @@ class Spirde():
         :return:
         """
 
+        # 更新最近内容模式
+        self.logger.info("请求页码：offset: %s limit: %s"% (offset,limit))
+
         if (type == 1):
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36',
+                'Host': 'httpbin.org'
+            }
+
             url = self.url + "/?tag=&offset=%s&limit=%s" % (offset, limit)
 
-            return_info = requests.get(url)
+            response = requests.get(url,headers)
 
             # 请求数据判断页码
-            html = return_info.text
-
-            info = json.loads(html)
+            html = response.json()
 
             # 处理数据
-            self.get_content(info)
+            self.get_content(html)
 
             # 更新最近内容模式
             self.logger.info("当前是【更新最近内容】模式")
         elif (type == 2):
             self.get_type(offset, limit)
+
             # 更新全部内容模式
             self.logger.info("当前是【全量更新】模式")
         else:
@@ -287,7 +293,6 @@ class Spirde():
             self.logger.info('\n 完成回发数据,返回结果 \n %s \n' % r.text)
 
 
-
 if __name__ == '__main__':
 
     spiede = Spirde()
@@ -299,3 +304,4 @@ if __name__ == '__main__':
     #limit:每页展示数据
 
     info = spiede.get_url(2, 0, 20)
+
