@@ -278,8 +278,13 @@ class Spirde():
 
             new_info = info['objects'][index]
 
+            self.logger.info('\n 知晓程序id \n %s \n' % new_info['id'])
+
+
+
             # 数据处理
             data = self.deal_data(new_info)
+
 
             # 小程序信息
             new_json = json.dumps(data[0])
