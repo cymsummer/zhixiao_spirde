@@ -131,8 +131,11 @@ class Spirde():
         data["program_desc"] = new_info["description"]
 
         # 小程序类型
-        if (new_info["tag"][0]["name"] == "游戏"):
-            data["program_style"] = "2"
+        if (new_info["tag"]):
+            if(new_info["tag"][0]["name"] == "游戏"):
+                data["program_style"] = "2"
+            else:
+                data["program_style"] = "1"
         else:
             data["program_style"] = "1"
 
@@ -308,5 +311,5 @@ if __name__ == '__main__':
 
     #limit:每页展示数据
 
-    info = spiede.get_url(2, 0, 20)
+    info = spiede.get_url(1, 0, 20)
 
